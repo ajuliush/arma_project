@@ -227,6 +227,26 @@ switch ($route) {
             echo "You are not authorized to access this page";
         }
         break;
+    case 'booking-update':
+        $id = $_GET['id'] ?? '';
+        require_once 'controllers/admin/BookingController.php';
+        $bookingController = new BookingController();
+        if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
+            $bookingController->update($id);
+        } else {
+            echo "You are not authorized to access this page";
+        }
+        break;
+    case 'delete_booking':
+        $id = $_GET['id'] ?? '';
+        require_once 'controllers/admin/BookingController.php';
+        $bookingController = new BookingController();
+        if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
+            $bookingController->delete($id);
+        } else {
+            echo "You are not authorized to access this page";
+        }
+        break;
         //booking routes end here
         //customer routes start here    
     case 'store':

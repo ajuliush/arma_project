@@ -27,7 +27,11 @@
                 </div>
                 <div class="bg-white shadow rounded-lg p-6">
                     <h3 class="text-gray-700 font-bold text-lg">Total Bookings</h3>
-                    <p class="text-4xl font-semibold text-blue-600 mt-4">1,245</p>
+                    <p class="text-4xl font-semibold text-blue-600 mt-4"><?php echo $totalBooking; ?></p>
+                </div>
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-gray-700 font-bold text-lg">Total Revenue</h3>
+                    <p class="text-4xl font-semibold text-blue-600 mt-4"><?php echo $totalRevenue; ?></p>
                 </div>
                 <div class="bg-white shadow rounded-lg p-6">
                     <h3 class="text-gray-700 font-bold text-lg">Total Users</h3>

@@ -104,4 +104,125 @@ class Booking
         $stmt->close();
         return $result;
     }
+    public function getBookingById(int $id): array
+    {
+        global $conn;
+        $stmt = $conn->prepare("
+        SELECT 
+        id, 
+        user_id, 
+        event_id, 
+        seat_type, 
+        quantity, 
+        adult_photo, 
+        total_price, 
+        total_price, 
+        booking_date, 
+        created_at, 
+        updated_at 
+        FROM tickets 
+        WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        //Execute the statement
+        $stmt->execute();
+        //Get the result
+        $result = $stmt->get_result();
+        //Fetch the event data as an associative array
+        $booking = $result->fetch_assoc();
+        //Close the statement and return the event data
+        $stmt->close();
+        return $booking ?: null;
+    }
+    public function update(): bool
+    {
+        global $conn;
+        // Fetch the current user data to get the existing profile photo
+        $currentTicket = $this->getTicketById($this->id);
+        $oldPhotoPath = $currentTicket->adult_photo;
+
+        // Prepare the SQL statement for updating user data
+        $stmt = $conn->prepare("UPDATE tickets SET user_id =?, event_id =?, seat_type =?, quantity =?, adult_photo =?, total_price =?, booking_date =?, created_at =?, updated_at =? WHERE id = ?");
+        if ($stmt === false) {
+            return false;
+        }
+        if ($this->adult_photo != $oldPhotoPath) {
+            if (file_exists($oldPhotoPath)) {
+                unlink($oldPhotoPath); // Delete the old photo from the server
+            }
+        }
+        //bind parameters
+        $stmt->bind_param(
+            "issssissss",
+            $this->user_id,
+            $this->event_id,
+            $this->seat_type,
+            $this->quantity,
+            $this->adult_photo,
+            $this->total_price,
+            $this->booking_date,
+            $this->created_at,
+            $this->updated_at,
+            $this->id //Bind the id of the user to update
+        );
+        //Execute the statement
+        $result = $stmt->execute();
+        //Close the statement
+        $stmt->close();
+        return $result;
+    }
+    public function getTicketById(int $id)
+    {
+        global $conn;
+
+        $stmt = $conn->prepare("SELECT * FROM tickets WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_object(); // Assuming you want to return an object
+
+        $stmt->close();
+
+        return $user;
+    }
+    public function delete(int $id): bool
+    {
+        global $conn;
+
+        // Prepare the SQL statement for deleting the user
+        $stmt = $conn->prepare("DELETE FROM tickets WHERE id = ?");
+
+        if ($stmt === false) {
+            return false;
+        }
+
+        // Bind the user ID for the WHERE clause
+        $stmt->bind_param("i", $id);
+
+        // Execute the statement
+        $result = $stmt->execute();
+
+        // Close the statement
+        $stmt->close();
+
+        return $result;
+    }
+    public function countAllBookings()
+    {
+        global $conn;
+        $stmt = $conn->prepare("SELECT COUNT(*) as total FROM tickets");
+
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                return (int) $row['total'];
+            }
+
+            return 0;
+        }
+
+        $stmt->close();
+        return 0;
+    }
 }
