@@ -120,6 +120,7 @@ class AuthController
 
             $_SESSION['authenticated'] = true;
             $_SESSION['id']            = $user['id'];
+            $_SESSION['name']          = $user['name'];
             $_SESSION['email']         = $email;
             $_SESSION['role']          = $user['role'];
 

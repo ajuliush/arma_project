@@ -1,5 +1,7 @@
 <?php
 require_once 'models/User.php';
+require_once 'models/Event.php';
+require_once 'models/Booking.php';
 
 #[AllowDynamicProperties]
 class CustomerController
@@ -7,10 +9,13 @@ class CustomerController
     public  function __construct()
     {
         $this->user = new User();
+        $this->event = new Event();
+        $this->booking = new Booking();
     }
     public function index(): void
     {
         $user = $this->user->getAllUsers();
+        $events = $this->event->getAllEvents();
         include 'views/customer/index.php';
     }
     public function profile(): void
@@ -94,5 +99,12 @@ class CustomerController
             http_response_code(405);
             echo "Method Not Allowed";
         }
+    }
+    public function myTickets(): void
+    {
+        $bookings  = $this->booking->getAllBookings();
+        // print_r($bookings);
+        // exit();
+        include 'views/customer/my-tickets.php';
     }
 }

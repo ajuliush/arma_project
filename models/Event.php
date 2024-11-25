@@ -16,43 +16,21 @@ class Event
 
     public function getAllEvents(): array
     {
-        if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
-            global $conn;
-            $stmt = $conn->prepare("SELECT id, name, description, date, time, price_with_table, price_without_table, requires_adult, seat_limit, created_at, updated_at FROM events");
+        global $conn;
+        $stmt = $conn->prepare("SELECT id, name, description, date, time, price_with_table, price_without_table, requires_adult, seat_limit, created_at, updated_at FROM events");
 
-            if ($stmt->execute()) {
-                $result = $stmt->get_result();
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
 
-                if ($result->num_rows > 0) {
-                    return $result->fetch_all(MYSQLI_ASSOC);
-                }
-
-                return [];
+            if ($result->num_rows > 0) {
+                return $result->fetch_all(MYSQLI_ASSOC);
             }
 
-            $stmt->close();
-            return [];
-        } elseif (isset($_SESSION['role']) && $_SESSION['role'] == 'user') {
-            global $conn;
-            $stmt = $conn->prepare("name, description, date,time , price_with_table, price_without_table, requires_adult, seat_limit, created_at, updated_at FROM events WHERE id = ?");
-            $stmt->bind_param("i", $_SESSION['id']);
-
-            if ($stmt->execute()) {
-                $result = $stmt->get_result();
-                if ($result->num_rows > 0) {
-                    $users = [];
-                    while ($user = $result->fetch_object()) {
-                        $users[] = $user; // Collect each user object
-                    }
-                    return $users; // Return the array of user objects
-                }
-
-                return [];
-            }
-
-            $stmt->close();
             return [];
         }
+
+        $stmt->close();
+        return [];
     }
     public function save(): bool
     {

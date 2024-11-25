@@ -103,10 +103,16 @@ class BookingController
                 $this->sales->updated_at    = date('Y-m-d H:i:s');
 
                 if ($this->sales->save()) {
-                    session_start();
-                    $_SESSION['success_message'] = "Booking Created successfully!";
-                    header('Location: /bookings');
-                    exit();
+                    if ($_SESSION['role'] == 'user') {
+                        // session_start();
+                        $_SESSION['success_message'] = "Booking Created successfully!";
+                        header('Location: /my-tickets');
+                    } else {
+                        session_start();
+                        $_SESSION['success_message'] = "Booking Created successfully!";
+                        header('Location: /bookings');
+                        exit();
+                    }
                 } else {
                     echo "Failed to save sales!";
                 }

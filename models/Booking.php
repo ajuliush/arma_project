@@ -48,16 +48,17 @@ class Booking
             global $conn;
             $stmt = $conn->prepare("SELECT 
                             tickets.id AS ticket_id,
-                            users.name AS name,
-                            events.mane AS name,
+                            users.name AS user_name,
+                            events.name AS event_name,
                             tickets.seat_type,
                             tickets.quantity,
+                            tickets.adult_photo,
                             tickets.total_price,
                             tickets.booking_date
-                        FROM tickets
-                        JOIN users ON tickets.user_id = users.id
-                        JOIN events ON tickets.event_id = events.id
-                        WHERE tickets.user_id = ?;");
+                            FROM tickets
+                            JOIN users ON tickets.user_id = users.id
+                            JOIN events ON tickets.event_id = events.id
+                           WHERE tickets.user_id = ?;");
 
             $stmt->bind_param("i", $_SESSION['id']);
 

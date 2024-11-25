@@ -199,6 +199,15 @@ switch ($route) {
             echo "You are not authorized to access this page";
         }
         break;
+    case 'my-tickets':;
+        require_once 'controllers/customer/CustomerController.php';
+        $myTicketController = new CustomerController();
+        if (isAuthenticated() && ($_SESSION['role'] === 'user')) {
+            $myTicketController->myTickets();
+        } else {
+            echo "You are not authorized to access this page";
+        }
+        break;
     case 'create-booking':
         require_once 'controllers/admin/BookingController.php';
         $bookingController = new BookingController();
@@ -211,7 +220,7 @@ switch ($route) {
     case 'booking-store':
         require_once 'controllers/admin/BookingController.php';
         $bookingController = new BookingController();
-        if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
+        if (isAuthenticated() && ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'user')) {
             $bookingController->store();
         } else {
             echo "You are not authorized to access this page";
