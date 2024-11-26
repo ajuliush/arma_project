@@ -11,6 +11,12 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Login</h1>
+        <?php if (isset($_SESSION['error'])): ?>
+        <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
+            <p class="text-red-700 text-sm"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
         <form action="/login" method="POST">
             <!-- Email -->
             <div class="mb-4">

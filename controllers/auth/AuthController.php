@@ -90,39 +90,42 @@ class AuthController
     public function login(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            session_start();
             $email    = trim($_POST['email'] ?? '');
             $password = trim($_POST['password'] ?? '');
 
             if (empty($email) || empty($password)) {
-                echo "Email and Password are required!";
+                $_SESSION['error'] = "Email and Password are required!";
+                header('Location: /login');
                 return;
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "Invalid email address!";
+                $_SESSION['error'] = "Invalid email address!";
+                header('Location: /login');
                 return;
             }
 
             $user = $this->user->findByEmail($email);
 
             if (!$user) {
-                echo "Email not found!";
+                $_SESSION['error'] = "Email not found!";
+                header('Location: /login');
                 return;
             }
 
             if (!password_verify($password, $user['password'])) {
-                echo "Wrong password!";
+                $_SESSION['error'] = "Wrong password!";
+                header('Location: /login');
                 return;
             }
 
             // Authenticate user
-            session_start();
-
             $_SESSION['authenticated'] = true;
-            $_SESSION['id']            = $user['id'];
-            $_SESSION['name']          = $user['name'];
-            $_SESSION['email']         = $email;
-            $_SESSION['role']          = $user['role'];
+            $_SESSION['id']           = $user['id'];
+            $_SESSION['name']         = $user['name'];
+            $_SESSION['email']        = $email;
+            $_SESSION['role']         = $user['role'];
 
             header('Location: /');
             exit();
