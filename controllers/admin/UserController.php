@@ -102,7 +102,13 @@ class UserController
         $user = $this->user->getSingleUser($id);
         // print_r($user['name']);
         // exit();
-        include 'views/admin/user/edit.php';
+        if ($user) {
+            include 'views/admin/user/edit.php';
+        } else {
+            // echo "User not found!";
+            http_response_code(404);
+            include 'views/components/404.php';
+        }
     }
 
     public function update(int $id): void
@@ -200,7 +206,9 @@ class UserController
                 echo "Failed to delete user!";
             }
         } else {
-            echo "User not found!";
+            // echo "User not found!";
+            http_response_code(404);
+            include 'views/components/404.php';
         }
     }
 }

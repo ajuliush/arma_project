@@ -8,6 +8,7 @@
                 <li><a href="/" class="hover:text-blue-300 transition duration-200">Events</a></li>
                 <li><a href="/profile" class="hover:text-blue-300 transition duration-200">Profile</a></li>
                 <li><a href="/my-tickets" class="hover:text-blue-300 transition duration-200">My Tickets</a></li>
+                <li><a href="/my-events" class="hover:text-blue-300 transition duration-200">My Events</a></li>
                 <li>
                     <form action="/logout" method="post">
                         <button type="submit"

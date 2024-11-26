@@ -124,14 +124,20 @@ class BookingController
             echo "Method Not Allowed";
         }
     }
-    public function edit($id): void
+    public function edit(int $id): void
     {
         $booking = $this->booking->getBookingById($id);
-        // print_r($booking);
-        // exit();
-        $users = $this->user->getAllUsers();
-        $events = $this->event->getAllEvents();
-        include 'views/admin/booking/edit.php';
+
+        // Check if booking exists and is not empty/false/null
+        if ($booking && !empty($booking)) {
+            $users = $this->user->getAllUsers();
+            $events = $this->event->getAllEvents();
+            include 'views/admin/booking/edit.php';
+        } elseif ($booking === false || empty($booking) || $booking === null) {
+            http_response_code(404);
+            include 'views/components/404.php';
+            exit(); // Add exit to prevent further execution
+        }
     }
     public function update(int $id): void
     {
@@ -265,7 +271,8 @@ class BookingController
                 echo "Failed to delete booking!";
             }
         } else {
-            echo "Booking not found!";
+            //    echo "Booking not found!";
+            include 'views/components/404.php';
         }
     }
 }

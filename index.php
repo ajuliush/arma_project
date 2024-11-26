@@ -75,7 +75,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $userController->index();
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
 
@@ -85,7 +86,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $userController->create();
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'edit-user':
@@ -95,7 +97,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $userController->edit($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'user-update':
@@ -105,7 +108,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $userController->update($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
 
@@ -116,7 +120,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $userController->delete($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
         //user routes end here
@@ -127,7 +132,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $eventController->index();
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'create-event':
@@ -136,7 +142,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $eventController->create();
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'event-store':
@@ -145,7 +152,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $eventController->store();
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'edit-event':
@@ -155,7 +163,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $eventController->edit($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'event-update':
@@ -165,7 +174,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $eventController->update($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'delete_event':
@@ -175,17 +185,19 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $eventController->delete($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'get-seat-type':
         $id = $_GET['id'] ?? '';
         require_once 'controllers/admin/EventController.php';
         $eventController = new EventController();
-        if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
+        if (isAuthenticated() && ($_SESSION['role'] === 'admin') || $_SESSION['role'] === 'user') {
             $eventController->getSeatType($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
         //event routes end here
@@ -196,25 +208,19 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $bookingController->index();
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
-    case 'my-tickets':;
-        require_once 'controllers/customer/CustomerController.php';
-        $myTicketController = new CustomerController();
-        if (isAuthenticated() && ($_SESSION['role'] === 'user')) {
-            $myTicketController->myTickets();
-        } else {
-            echo "You are not authorized to access this page";
-        }
-        break;
+
     case 'create-booking':
         require_once 'controllers/admin/BookingController.php';
         $bookingController = new BookingController();
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $bookingController->create();
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'booking-store':
@@ -223,7 +229,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'user')) {
             $bookingController->store();
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'edit-booking':
@@ -233,7 +240,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $bookingController->edit($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'booking-update':
@@ -243,7 +251,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $bookingController->update($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
     case 'delete_booking':
@@ -253,7 +262,8 @@ switch ($route) {
         if (isAuthenticated() && ($_SESSION['role'] === 'admin')) {
             $bookingController->delete($id);
         } else {
-            echo "You are not authorized to access this page";
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
         }
         break;
         //booking routes end here
@@ -317,6 +327,62 @@ switch ($route) {
         }
         break;
         //user profile routes end here
+        //customer ticket routes start here
+    case 'my-tickets':
+        require_once 'controllers/customer/CustomerController.php';
+        $myTicketController = new CustomerController();
+        if (isAuthenticated() && ($_SESSION['role'] === 'user')) {
+            $myTicketController->myTickets();
+        } else {
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
+        }
+        break;
+    case 'edit-ticket':
+        $id = $_GET['id'] ?? '';
+        require_once 'controllers/customer/CustomerController.php';
+        $myTicketController = new CustomerController();
+        if (isAuthenticated() && ($_SESSION['role'] === 'user')) {
+            $myTicketController->editTicket($id);
+        } else {
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
+        }
+        break;
+    case 'update-ticket':
+        $id = $_GET['id'] ?? '';
+        require_once 'controllers/customer/CustomerController.php';
+        $myTicketController = new CustomerController();
+        if (isAuthenticated() && ($_SESSION['role'] === 'user')) {
+            $myTicketController->updateTicket($id);
+        } else {
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
+        }
+        break;
+    case 'delete_ticket':
+        $id = $_GET['id'] ?? '';
+        require_once 'controllers/customer/CustomerController.php';
+        $myTicketController = new CustomerController();
+        if (isAuthenticated() && ($_SESSION['role'] === 'user')) {
+            $myTicketController->deleteTicket($id);
+        } else {
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
+        }
+        break;
+        //customer ticket routes end here
+        //customer event routes start here
+    case 'my-events':
+        require_once 'controllers/customer/CustomerController.php';
+        $myEventController = new CustomerController();
+        if (isAuthenticated() && ($_SESSION['role'] === 'user')) {
+            $myEventController->myEvents();
+        } else {
+            // echo "You are not authorized to access this page";
+            include 'views/components/unauthorized.php';
+        }
+        break;
         // Default route for logout user start here
     case 'logout':
         session_destroy(); // Destroy the session
@@ -326,7 +392,8 @@ switch ($route) {
         // Default route for 404 page start here
     default:
         http_response_code(404);
-        echo "Page not found!";
+        // echo "Page not found!";
+        include 'views/components/404.php';
         break;
         // Default route for 404 page end here
 }

@@ -47,9 +47,9 @@ class Booking
         } elseif (isset($_SESSION['role']) && $_SESSION['role'] == 'user') {
             global $conn;
             $stmt = $conn->prepare("SELECT 
-                            tickets.id AS ticket_id,
                             users.name AS user_name,
                             events.name AS event_name,
+                            tickets.id,
                             tickets.seat_type,
                             tickets.quantity,
                             tickets.adult_photo,
@@ -225,5 +225,31 @@ class Booking
 
         $stmt->close();
         return 0;
+    }
+    public function getMyEvents()
+    {
+        global $conn;
+        $stmt = $conn->prepare("SELECT events.* 
+                FROM tickets
+                INNER JOIN events ON tickets.event_id = events.id
+                WHERE tickets.user_id = ?
+                ");
+        $stmt->bind_param("i", $_SESSION['id']);
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $events = [];
+                while ($row = $result->fetch_assoc()) {
+                    $events[] = $row;
+                }
+                return $events;
+            }
+
+            return [];
+        }
+
+        $stmt->close();
+        return [];
     }
 }

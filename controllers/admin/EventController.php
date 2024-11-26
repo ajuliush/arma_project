@@ -75,8 +75,9 @@ class EventController
         if ($event) {
             include 'views/admin/event/edit.php';
         } else {
+            // echo "Page not found!";
             http_response_code(404);
-            echo "Page not found!";
+            include 'views/components/404.php';
         }
     }
     public function update(int $id): void
@@ -146,7 +147,9 @@ class EventController
                 echo "Failed to delete event!";
             }
         } else {
-            echo "Event not found!";
+            // echo "Event not found!";
+            http_response_code(404);
+            include 'views/components/404.php';
         }
     }
     public function getSeatType($id): void

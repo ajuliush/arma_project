@@ -121,9 +121,9 @@
                             </p>
                         </td>
                         <td class="p-4 border-b border-slate-700 bg-slate-900">
-                            <a href="edit-booking?id=<?php echo $booking->ticked_id; ?>"
+                            <a href="edit-ticket?id=<?php echo ($booking->id); ?>"
                                 class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</a>
-                            <a href="delete_booking?id=<?php echo $booking->ticked_id; ?>"
+                            <a href="delete_ticket?id=<?php echo $booking->id; ?>"
                                 onclick="return confirm('Are you sure?');"
                                 class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete</a>
                         </td>

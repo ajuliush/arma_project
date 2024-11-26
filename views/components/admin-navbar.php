@@ -8,6 +8,8 @@
         <nav>
             <ul class="flex space-x-4">
                 <li><a href="/users" class="hover:underline">Users</a></li>
+                <li><a href="/events" class="hover:underline">Events</a></li>
+                <li><a href="/bookings" class="hover:underline">Booking</a></li>
                 <!-- <li><a href="/logout" class="hover:underline">Logout</a></li> -->
                 <form action="/logout" method="POST">
                     <button type="submit" class="hover:underline text-white bg-transparent border-0">
