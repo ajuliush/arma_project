@@ -63,12 +63,15 @@ class BookingController
             if (empty($booking_date)) {
                 $errors['booking_date'] = 'Booking date is required';
             }
-            if (empty($photo)) {
-                $errors['photo'] = 'Photo is required';
+            if (empty($photo) || $photo['error'] !== UPLOAD_ERR_OK) {
+                $errors['photo'] = 'A valid photo is required';
             }
             if (!empty($errors)) {
-                echo 'Missing fields: ' . implode(', ', $errors);
-                return;
+                session_start();
+                $_SESSION['errors'] = $errors;
+                header('Location: /create-booking');
+                // echo 'Missing fields: ' . implode(', ', $errors);
+                exit();
             }
             //upload photo
             $uploadDir = 'storage/adult_photo/';
@@ -80,7 +83,9 @@ class BookingController
             $photoPath      = $uploadDir . $uniqueFileName;
 
             if (!move_uploaded_file($photo['tmp_name'], $photoPath)) {
-                echo "Failed to upload photo!";
+                // echo "Failed to upload photo!";
+                $errors['photo'] = 'Failed to upload photo! Please try again.';
+                header('Location: /create-booking');
                 return;
             }
             //Save Booking
@@ -144,7 +149,7 @@ class BookingController
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user_id         = $_POST['user_id'] ?? null;
             $event_id        = $_POST['event_id'] ?? null;
-            $seat_type       = $_POST['seat_type'] ?? null;
+            $seat_type       = $_POST['seat_type'] ?? $_POST['seat_type_old_value'];
             $quantity        = $_POST['quantity'] ?? null;
             $total_price     = isset($_POST['total_price']) ? floatval(str_replace('$', '', $_POST['total_price'])) : null;
             $booking_date    = $_POST['booking_date'] ?? null;
@@ -174,9 +179,25 @@ class BookingController
                 $errors['photo'] = 'Photo is required';
             }
             if (!empty($errors)) {
-                echo 'Missing fields: ' . implode(', ', $errors);
-                return;
+                session_start();
+                $_SESSION['errors'] = $errors;
+                header('Location: /edit-booking?id=' . $id);
+                // echo 'Missing fields: ' . implode(', ', $errors);
+                exit();
             }
+            // Fetch the existing booking if not already done
+            if (!isset($this->booking->adult_photo)) {
+                $existingBooking = $this->booking->getBookingById($id);
+                if ($existingBooking) {
+                    $this->booking->adult_photo = $existingBooking['adult_photo']; // Accessing as an array
+                } else {
+                    // Handle the case where the booking does not exist
+                    http_response_code(404);
+                    include 'views/components/404.php';
+                    exit();
+                }
+            }
+
             //upload photo
             $uploadDir = 'storage/adult_photo/';
             if (!is_dir($uploadDir)) {
@@ -188,12 +209,13 @@ class BookingController
                 $photoPath      = $uploadDir . $uniqueFileName;
 
                 if (!move_uploaded_file($photo['tmp_name'], $photoPath)) {
-                    echo "Failed to upload photo!";
+                    $errors['photo'] = 'Failed to upload photo! Please try again.';
+                    header('Location: /edit-booking?id=' . $id);
                     return;
                 }
             } else {
                 // If no new photo, keep the existing one
-                $photoPath = $this->booking->adult_photo; // Assuming you fetch the existing user first
+                $photoPath = $this->booking->adult_photo; // Now this will be initialized
             }
             //Update Booking
             $this->booking->id = $id;

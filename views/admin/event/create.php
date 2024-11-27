@@ -18,11 +18,9 @@
     <?php
     // session_start();
     $errors = $_SESSION['errors'] ?? [];
-    $old = $_SESSION['old'] ?? [];
 
     // Clear the session data after retrieving
     unset($_SESSION['errors']);
-    unset($_SESSION['old']);
     ?>
 
     <div class="container mx-auto py-10 px-6">
