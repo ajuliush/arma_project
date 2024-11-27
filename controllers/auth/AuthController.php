@@ -22,32 +22,38 @@ class AuthController
 
             // Validation
             if (empty($name) || empty($email) || empty($phone) || empty($photo)) {
-                echo "All fields are required!";
+                $_SESSION['error'] = "All fields are required!";
+                header('Location: /register');
                 return;
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "Invalid email address!";
+                $_SESSION['error'] = "Invalid email address!";
+                header('Location: /register');
                 return;
             }
 
             if (!preg_match('/^[0-9]{10,15}$/', $phone)) {
-                echo "Invalid phone number!";
+                $_SESSION['error'] = "Invalid phone number!";
+                header('Location: /register');
                 return;
             }
 
             if (empty($password)) {
-                echo "Password is required!";
+                $_SESSION['error'] = "Password is required!";
+                header('Location: /register');
                 return;
             }
 
             if (empty($confirmPassword)) {
-                echo "Confirm password is required!";
+                $_SESSION['error'] = "Confirm password is required!";
+                header('Location: /register');
                 return;
             }
 
             if ($password !== $confirmPassword) {
-                echo "Passwords do not match!";
+                $_SESSION['error'] = "Passwords do not match!";
+                header('Location: /register');
                 return;
             }
 
@@ -61,7 +67,8 @@ class AuthController
             $photoPath      = $uploadDir . $uniqueFileName;
 
             if (!move_uploaded_file($photo['tmp_name'], $photoPath)) {
-                echo "Failed to upload photo!";
+                $_SESSION['error'] = "Failed to upload photo!";
+                header('Location: /register');
                 return;
             }
 
@@ -76,21 +83,26 @@ class AuthController
             $this->user->updated_at    = date('Y-m-d H:i:s');
 
             if ($this->user->save()) {
+                $_SESSION['success_message'] = "Registration successful! Please login.";
                 header('Location: /login');
                 exit();
             } else {
-                echo "Failed to register user!";
+                $_SESSION['error'] = "Failed to register user!";
+                header('Location: /register');
+                return;
             }
         } else {
             http_response_code(405);
-            echo "Method Not Allowed";
+            $_SESSION['error'] = "Method Not Allowed";
+            header('Location: /register');
+            return;
         }
     }
 
     public function login(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            session_start();
+            // session_start();
             $email    = trim($_POST['email'] ?? '');
             $password = trim($_POST['password'] ?? '');
 

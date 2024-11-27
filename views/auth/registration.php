@@ -10,6 +10,12 @@
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+        <?php if (isset($_SESSION['error'])): ?>
+        <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
+            <p class="text-red-700 text-sm"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
         <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Register</h1>
         <form action="/register" method="POST" enctype="multipart/form-data">
             <!-- Name -->
@@ -47,7 +53,7 @@
             <!-- Password -->
             <div class="mb-6">
                 <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="tel" id="password" name="password" placeholder="Enter your password"
+                <input type="password" id="password" name="password" placeholder="Enter your password"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     required>
             </div>
@@ -55,7 +61,7 @@
             <!-- Confirm Password -->
             <div class="mb-6">
                 <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                <input type="tel" id="confirm_password" name="confirm_password"
+                <input type="password" id="confirm_password" name="confirm_password"
                     placeholder="Enter your confirm password"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     required>

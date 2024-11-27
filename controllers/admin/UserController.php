@@ -29,34 +29,43 @@ class UserController
             $confirmPassword = $_POST['confirm_password'] ?? '';
             $photo           = $_FILES['photo'] ?? null;
 
-            // Validation
             if (empty($name) || empty($email) || empty($phone) || empty($photo)) {
-                echo "All fields are required!";
+                $_SESSION['error'] = "All fields are required!";
+                header('Location: /create-user');
                 return;
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "Invalid email address!";
+                $_SESSION['error_email'] = "Invalid email address!";
+                header('Location: /create-user');
                 return;
             }
 
             if (!preg_match('/^[0-9]{10,15}$/', $phone)) {
-                echo "Invalid phone number!";
+                $_SESSION['error_phone'] = "Invalid phone number!";
+                header('Location: /create-user');
                 return;
             }
-
+            if (empty($photo)) {
+                $_SESSION['error'] = "Image is required!";
+                header('Location: /create-user');
+                return;
+            }
             if (empty($password)) {
-                echo "Password is required!";
+                $_SESSION['error'] = "Password is required!";
+                header('Location: /create-user');
                 return;
             }
 
             if (empty($confirmPassword)) {
-                echo "Confirm password is required!";
+                $_SESSION['error_password'] = "Confirm password is required!";
+                header('Location: /create-user');
                 return;
             }
 
             if ($password !== $confirmPassword) {
-                echo "Passwords do not match!";
+                $_SESSION['error_password_confirm'] = "Passwords do not match!";
+                header('Location: /create-user');
                 return;
             }
 
@@ -70,7 +79,9 @@ class UserController
             $photoPath      = $uploadDir . $uniqueFileName;
 
             if (!move_uploaded_file($photo['tmp_name'], $photoPath)) {
-                echo "Failed to upload photo!";
+                // echo "Failed to upload photo!";
+                $_SESSION['error_image'] = "Failed to upload photo!";
+                header('Location: /create-user');
                 return;
             }
 
@@ -114,6 +125,14 @@ class UserController
     public function update(int $id): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Fetch existing user data first
+            $existingUser = $this->user->getSingleUser($id);
+            if (!$existingUser) {
+                $_SESSION['error'] = "User not found!";
+                header('Location: /users');
+                return;
+            }
+
             $name            = trim($_POST['name'] ?? '');
             $email           = trim($_POST['email'] ?? '');
             $phone           = trim($_POST['phone'] ?? '');
@@ -123,63 +142,74 @@ class UserController
 
             // Validation
             if (empty($name) || empty($email) || empty($phone)) {
-                echo "All fields are required!";
+                $_SESSION['error'] = "All fields are required!";
+                header('Location: /edit-user?id=' . $id);
                 return;
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "Invalid email address!";
+                // echo "Invalid email address!";
+                $_SESSION['error_email'] = "Invalid email address!";
+                header('Location: /edit-user?id=' . $id);
                 return;
             }
 
             if (!preg_match('/^[0-9]{10,15}$/', $phone)) {
-                echo "Invalid phone number!";
+                // echo "Invalid phone number!";
+                $_SESSION['error_phone'] = "Invalid phone number!";
+                header('Location: /edit-user?id=' . $id);
                 return;
             }
 
             // Password validation (optional)
             if (!empty($password) && $password !== $confirmPassword) {
-                echo "Passwords do not match!";
+                // echo "Passwords do not match!";
+                $_SESSION['error_password'] = "Passwords do not match!";
+                header('Location: /edit-user?id=' . $id);
                 return;
             }
 
             // File Upload (if a new photo is uploaded)
-            $uploadDir = 'storage/photos/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-
             if ($photo && $photo['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = 'storage/photos/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
                 $uniqueFileName = uniqid('photo_', true) . '.' . pathinfo($photo['name'], PATHINFO_EXTENSION);
                 $photoPath      = $uploadDir . $uniqueFileName;
 
                 if (!move_uploaded_file($photo['tmp_name'], $photoPath)) {
-                    echo "Failed to upload photo!";
+                    $_SESSION['error_image'] = "Failed to upload photo!";
+                    header('Location: /edit-user?id=' . $id);
                     return;
                 }
             } else {
-                // If no new photo, keep the existing one
-                $photoPath = $this->user->profile_photo; // Assuming you fetch the existing user first
+                // If no new photo, use the existing photo path
+                $photoPath = $existingUser['profile_photo'];
             }
 
             // Update user
-            $this->user->id             = $id; // Assuming you have an ID property
-            $this->user->name           = $name;
-            $this->user->email          = $email;
-            $this->user->phone          = $phone;
-            if (!empty($password)) {
-                $this->user->password     = password_hash($password, PASSWORD_DEFAULT);
-            }
-            $this->user->profile_photo   = $photoPath;
-            $this->user->updated_at     = date('Y-m-d H:i:s');
+            $this->user->id            = $id;
+            $this->user->name          = $name;
+            $this->user->email         = $email;
+            $this->user->phone         = $phone;
+            $this->user->profile_photo = $photoPath;
+            // Handle password - if new password provided, use it; otherwise use existing password
+            $this->user->password = !empty($password)
+                ? password_hash($password, PASSWORD_DEFAULT)
+                : $existingUser['password'];
+            $this->user->updated_at = date('Y-m-d H:i:s');
 
-            if ($this->user->update()) { // Assuming you have an update method
+            if ($this->user->update()) {
                 session_start();
                 $_SESSION['success_message'] = "User Updated successfully!";
                 header('Location: /users');
                 exit();
             } else {
-                echo "Failed to update user!";
+                // echo "Failed to update user!";
+                $_SESSION['error'] = "Failed to update user!";
+                header('Location: /edit-user?id=' . $id);
             }
         } else {
             http_response_code(405);
