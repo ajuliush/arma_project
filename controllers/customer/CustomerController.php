@@ -28,6 +28,16 @@ class CustomerController
 
     public function profileUpdate(int $id): void // Added parameter for user ID
     {
+        // Fetch the existing user first
+        $existingUser = $this->user->getUserById($id); // Assuming you have a method to get user by ID
+        if (!$existingUser) {
+            echo "User not found!";
+            return;
+        }
+
+        // Initialize the profile photo
+        $this->user->profile_photo = $existingUser->profile_photo; // Set the existing photo
+
         // var_dump($_SESSION['id']);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name            = trim($_POST['name'] ?? '');
@@ -39,24 +49,28 @@ class CustomerController
 
             // Validation
             if (empty($name) || empty($email) || empty($phone)) {
-                echo "All fields are required!";
-                return;
+                $_SESSION['error_message'] = "All fields are required!"; // Store error message in session
+                header('Location: /profile'); // Redirect to profile page
+                exit();
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "Invalid email address!";
-                return;
+                $_SESSION['error_message'] = "Invalid email address!"; // Store error message in session
+                header('Location: /profile'); // Redirect to profile page
+                exit();
             }
 
             if (!preg_match('/^[0-9]{10,15}$/', $phone)) {
-                echo "Invalid phone number!";
-                return;
+                $_SESSION['error_message'] = "Invalid phone number!"; // Store error message in session
+                header('Location: /profile'); // Redirect to profile page
+                exit();
             }
 
             // Password validation (optional)
             if (!empty($password) && $password !== $confirmPassword) {
-                echo "Passwords do not match!";
-                return;
+                $_SESSION['error_message'] = "Passwords do not match!"; // Store error message in session
+                header('Location: /profile'); // Redirect to profile page
+                exit();
             }
 
             // File Upload (if a new photo is uploaded)
@@ -75,7 +89,7 @@ class CustomerController
                 }
             } else {
                 // If no new photo, keep the existing one
-                $photoPath = $this->user->profile_photo; // Assuming you fetch the existing user first
+                $photoPath = $this->user->profile_photo; // Now this will not cause an error
             }
 
             // Update user
@@ -83,9 +97,15 @@ class CustomerController
             $this->user->name           = $name;
             $this->user->email          = $email;
             $this->user->phone          = $phone;
+
+            // Initialize password only if it's provided
             if (!empty($password)) {
                 $this->user->password     = password_hash($password, PASSWORD_DEFAULT);
+            } else {
+                // If no new password is provided, keep the existing one
+                $this->user->password     = $existingUser->password; // Assuming you fetch the existing user first
             }
+
             $this->user->profile_photo   = $photoPath;
             $this->user->updated_at     = date('Y-m-d H:i:s');
 
@@ -122,7 +142,7 @@ class CustomerController
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user_id         = $_POST['user_id'] ?? null;
             $event_id        = $_POST['event_id'] ?? null;
-            $seat_type       = $_POST['seat_type'] ?? null;
+            $seat_type       = $_POST['seat_type'] ?? $_POST['seat_type_old_value'];
             $quantity        = $_POST['quantity'] ?? null;
             $total_price     = isset($_POST['total_price']) ? floatval(str_replace('$', '', $_POST['total_price'])) : null;
             $booking_date    = $_POST['booking_date'] ?? null;
@@ -152,9 +172,25 @@ class CustomerController
                 $errors['photo'] = 'Photo is required';
             }
             if (!empty($errors)) {
-                echo 'Missing fields: ' . implode(', ', $errors);
-                return;
+                session_start();
+                $_SESSION['errors'] = $errors;
+                header('Location: /edit-ticket?id=' . $id);
+                // echo 'Missing fields: ' . implode(', ', $errors);
+                exit();
             }
+            // Fetch the existing booking if not already done
+            if (!isset($this->booking->adult_photo)) {
+                $existingBooking = $this->booking->getBookingById($id);
+                if ($existingBooking) {
+                    $this->booking->adult_photo = $existingBooking['adult_photo']; // Accessing as an array
+                } else {
+                    // Handle the case where the booking does not exist
+                    http_response_code(404);
+                    include 'views/components/404.php';
+                    exit();
+                }
+            }
+
             //upload photo
             $uploadDir = 'storage/adult_photo/';
             if (!is_dir($uploadDir)) {
@@ -166,12 +202,13 @@ class CustomerController
                 $photoPath      = $uploadDir . $uniqueFileName;
 
                 if (!move_uploaded_file($photo['tmp_name'], $photoPath)) {
-                    echo "Failed to upload photo!";
+                    $errors['photo'] = 'Failed to upload photo! Please try again.';
+                    header('Location: /edit-ticket?id=' . $id);
                     return;
                 }
             } else {
                 // If no new photo, keep the existing one
-                $photoPath = $this->booking->adult_photo; // Assuming you fetch the existing user first
+                $photoPath = $this->booking->adult_photo; // Now this will be initialized
             }
             //Update Booking
             $this->booking->id = $id;

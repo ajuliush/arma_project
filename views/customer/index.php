@@ -87,7 +87,7 @@
                 </svg>
             </button>
 
-            <form action="booking-store" method="post" enctype="multipart/form-data">
+            <form action="booking-store" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <div class="mt-3">
                     <h3 class="text-2xl font-bold text-gray-900 mb-8" id="modal-title"></h3>
 
@@ -101,7 +101,9 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Select Ticket
                                         Type</label>
                                     <select id="ticketType" name="seat_type"
-                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4 bg-white">
+                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4"
+                                        required>
+                                        <option value="">-- Select Ticket Type --</option>
                                         <option value="with_table">With Table</option>
                                         <option value="without_table">Without Table</option>
                                     </select>
@@ -111,7 +113,8 @@
                                         Tickets</label>
                                     <input type="number" id="ticketQuantity" min="1" max="8" value="1" name="quantity"
                                         onchange="validateTicketQuantity(this)"
-                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4">
+                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4"
+                                        required>
                                     <p class="mt-1 text-sm text-gray-500">Maximum 8 tickets per booking</p>
                                 </div>
                             </div>
@@ -124,7 +127,8 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Booking Date</label>
                                     <input type="date" name="booking_date" id="booking_date"
-                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4">
+                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4"
+                                        required>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Adult Photo ID</label>
@@ -243,7 +247,58 @@
         }
         updateTotalPrice();
     }
+
+    function validateForm() {
+        const ticketType = document.getElementById('ticketType');
+        const ticketQuantity = document.getElementById('ticketQuantity');
+        const bookingDate = document.getElementById('booking_date');
+        const photo = document.getElementById('photo');
+        let isValid = true;
+
+        // Reset previous error styles
+        ticketType.classList.remove('border-red-500');
+        ticketQuantity.classList.remove('border-red-500');
+        bookingDate.classList.remove('border-red-500');
+        photo.parentElement.classList.remove('border-red-500'); // Reset photo field error
+
+        // Validate Ticket Type
+        if (!ticketType.value) {
+            ticketType.classList.add('border-red-500');
+            isValid = false;
+        }
+
+        // Validate Ticket Quantity
+        if (ticketQuantity.value < 1 || ticketQuantity.value > 8) {
+            ticketQuantity.classList.add('border-red-500');
+            isValid = false;
+        }
+
+        // Validate Booking Date
+        if (!bookingDate.value) {
+            bookingDate.classList.add('border-red-500');
+            isValid = false;
+        }
+
+        // Validate Photo ID
+        if (!photo.files.length) {
+            photo.parentElement.classList.add('border-red-500'); // Highlight the label instead
+            isValid = false;
+        }
+
+        if (!isValid) {
+            alert('Please correct the highlighted fields.');
+        }
+
+        return isValid; // Return the overall validity
+    }
     </script>
+
+    <style>
+    .border-red-500 {
+        border-color: red !important;
+        /* Ensure the red border is applied */
+    }
+    </style>
 </body>
 
 </html>

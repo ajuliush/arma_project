@@ -200,7 +200,11 @@ class UserController
                 ? password_hash($password, PASSWORD_DEFAULT)
                 : $existingUser['password'];
             $this->user->updated_at = date('Y-m-d H:i:s');
-
+            if ($existingUser['role'] == 'admin') {
+                $this->user->role = 'admin';
+            } else {
+                $this->user->role = 'user';
+            }
             if ($this->user->update()) {
                 session_start();
                 $_SESSION['success_message'] = "User Updated successfully!";

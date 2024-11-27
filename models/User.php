@@ -92,7 +92,7 @@ class User
     }
 
     // Example method to fetch user by ID
-    private function getUserById(int $id)
+    public function getUserById(int $id)
     {
         global $conn;
 
