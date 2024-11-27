@@ -31,19 +31,23 @@ class EventController
             $requires_adult          = trim($_POST['requires_adult'] ?? '');
             $seat_limit              = trim($_POST['seat_limit'] ?? '');
             //validation
-            $missingFields = [];
-            if (empty($name)) $missingFields[] = 'name';
-            if (empty($description)) $missingFields[] = 'description';
-            if (empty($date)) $missingFields[] = 'date';
-            if (empty($time)) $missingFields[] = 'time';
-            if (empty($price_with_table)) $missingFields[] = 'price_with_table';
-            if (empty($price_without_table)) $missingFields[] = 'price_without_table';
-            if (!isset($_POST['requires_adult'])) $missingFields[] = 'requires_adult';
-            if (empty($seat_limit)) $missingFields[] = 'seat_limit';
+            $errors = [];
+            if (empty($name)) $errors['name'] = 'Name is required';
+            if (empty($description)) $errors['description'] = 'Description is required';
+            if (empty($date)) $errors['date'] = 'Date is required';
+            if (empty($time)) $errors['time'] = 'Time is required';
+            if (empty($price_with_table)) $errors['price_with_table'] = 'Price with table is required';
+            if (empty($price_without_table)) $errors['price_without_table'] = 'Price without table is required';
+            if (!isset($_POST['requires_adult'])) $errors['requires_adult'] = 'Adult requirement must be specified';
+            if (empty($seat_limit)) $errors['seat_limit'] = 'Seat limit is required';
 
-            if (!empty($missingFields)) {
-                echo 'Missing fields: ' . implode(', ', $missingFields);
-                return;
+            if (!empty($errors)) {
+                // Store the submitted data and errors in session to preserve them after redirect
+                session_start();
+                $_SESSION['errors'] = $errors;
+                $_SESSION['old'] = $_POST;  // Store submitted data
+                header('Location: /create-event');
+                exit();
             }
             //save event
             $this->event->name = $name;
@@ -92,19 +96,23 @@ class EventController
             $requires_adult          = trim($_POST['requires_adult'] ?? '');
             $seat_limit              = trim($_POST['seat_limit'] ?? '');
             //validation
-            $missingFields = [];
-            if (empty($name)) $missingFields[] = 'name';
-            if (empty($description)) $missingFields[] = 'description';
-            if (empty($date)) $missingFields[] = 'date';
-            if (empty($time)) $missingFields[] = 'time';
-            if (empty($price_with_table)) $missingFields[] = 'price_with_table';
-            if (empty($price_without_table)) $missingFields[] = 'price_without_table';
-            if (!isset($_POST['requires_adult'])) $missingFields[] = 'requires_adult';
-            if (empty($seat_limit)) $missingFields[] = 'seat_limit';
+            $errors = [];
+            if (empty($name)) $errors['name'] = 'Name is required';
+            if (empty($description)) $errors['description'] = 'Description is required';
+            if (empty($date)) $errors['date'] = 'Date is required';
+            if (empty($time)) $errors['time'] = 'Time is required';
+            if (empty($price_with_table)) $errors['price_with_table'] = 'Price with table is required';
+            if (empty($price_without_table)) $errors['price_without_table'] = 'Price without table is required';
+            if (!isset($_POST['requires_adult'])) $errors['requires_adult'] = 'Adult requirement must be specified';
+            if (empty($seat_limit)) $errors['seat_limit'] = 'Seat limit is required';
 
-            if (!empty($missingFields)) {
-                echo 'Missing fields: ' . implode(', ', $missingFields);
-                return;
+            if (!empty($errors)) {
+                // Store the submitted data and errors in session to preserve them after redirect
+                session_start();
+                $_SESSION['errors'] = $errors;
+                $_SESSION['old'] = $_POST;  // Store submitted data
+                header('Location: /edit-event?id=' . $id);
+                exit();
             }
             //update event
             $this->event->id = $id;
