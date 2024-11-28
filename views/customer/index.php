@@ -130,7 +130,7 @@
                             <h4 class="text-lg font-semibold text-gray-800">Available Tickets</h4>
                             <p class="text-sm text-gray-600">We have <span id="availableTicketsCount"
                                     class="font-bold">0</span> tickets available for this event.</p>
-                            <input type="text" id="availableTickets">
+                            <input type="hidden" id="availableTickets">
                         </div>
 
                         <!-- Personal Details Section -->
