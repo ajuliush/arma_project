@@ -17,7 +17,27 @@ class Event
     public function getAllEvents(): array
     {
         global $conn;
-        $stmt = $conn->prepare("SELECT id, name, description, date, time, price_with_table, price_without_table, requires_adult, seat_limit, created_at, updated_at FROM events");
+        $stmt = $conn->prepare("
+        SELECT 
+            e.id, 
+            e.name, 
+            e.description, 
+            e.date, 
+            e.time, 
+            e.price_with_table, 
+            e.price_without_table, 
+            e.requires_adult, 
+            e.seat_limit, 
+            e.created_at, 
+            e.updated_at,
+            SUM(t.quantity) AS total_quantity
+        FROM 
+            events e
+        LEFT JOIN 
+            tickets t ON e.id = t.event_id
+        GROUP BY 
+            e.id
+        ");
 
         if ($stmt->execute()) {
             $result = $stmt->get_result();
@@ -109,7 +129,20 @@ class Event
     public function getSeatTypesById($id): ?array
     {
         global $conn;
-        $stmt = $conn->prepare("SELECT id, price_with_table, price_without_table, seat_limit, created_at, updated_at FROM events WHERE id = ?");
+        $stmt = $conn->prepare("
+            SELECT 
+                e.id, 
+                e.price_with_table, 
+                e.price_without_table, 
+                e.seat_limit, 
+                e.created_at, 
+                e.updated_at, 
+                SUM(t.quantity) AS total_quantity 
+            FROM events e
+            LEFT JOIN tickets t ON e.id = t.event_id 
+            WHERE e.id = ? 
+            GROUP BY e.id
+        ");
         $stmt->bind_param("i", $id);
         //Execute the statement
         $stmt->execute();

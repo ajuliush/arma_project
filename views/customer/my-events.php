@@ -71,9 +71,12 @@
     </div>
     <!-- Main Content -->
     <div class="container mx-auto py-10 px-6">
-        <a href="/" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mb-4">
-            Make Booking
-        </a>
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-900">My Events</h1>
+            <a href="/" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+                Make Booking
+            </a>
+        </div>
         <div
             class="relative flex flex-col w-full h-full overflow-scroll text-slate-300 bg-slate-800 shadow-md rounded-lg bg-clip-border">
             <table class="w-full text-left table-auto min-w-max">
@@ -147,7 +150,7 @@
                                 <?php echo htmlspecialchars($event['date']); ?>
                             </p>
                         </td>
-                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
                             <p class="text-sm text-slate-300">
                                 <?php echo htmlspecialchars($event['time']); ?>
                             </p>
@@ -157,12 +160,12 @@
                                 <?php echo htmlspecialchars($event['price_with_table']); ?>
                             </p>
                         </td>
-                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
                             <p class="text-sm text-slate-300">
                                 <?php echo htmlspecialchars($event['price_without_table']); ?>
                             </p>
                         </td>
-                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
                             <button onclick='showModal(<?php echo json_encode($event); ?>)'
                                 class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
                                 View

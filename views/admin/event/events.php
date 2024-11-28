@@ -45,28 +45,20 @@
                                 <td class="px-6 py-4 text-slate-300" id="modal-description"></td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-4 text-slate-300 font-medium">Date</td>
-                                <td class="px-6 py-4 text-slate-300" id="modal-date"></td>
+                                <td class="px-6 py-4 text-slate-300 font-medium">Date Time</td>
+                                <td class="px-6 py-4 text-slate-300" id="modal-date-time"></td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-4 text-slate-300 font-medium">Time</td>
-                                <td class="px-6 py-4 text-slate-300" id="modal-time"></td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-slate-300 font-medium">Price with Table</td>
+                                <td class="px-6 py-4 text-slate-300 font-medium">Price with Table & without Table</td>
                                 <td class="px-6 py-4 text-slate-300" id="modal-price-with-table"></td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 text-slate-300 font-medium">Price without Table</td>
-                                <td class="px-6 py-4 text-slate-300" id="modal-price-without-table"></td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-4 text-slate-300 font-medium">Requires Adult</td>
                                 <td class="px-6 py-4 text-slate-300" id="modal-requires-adult"></td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-4 text-slate-300 font-medium">Seat Limit</td>
-                                <td class="px-6 py-4 text-slate-300" id="modal-seat-limit"></td>
+                                <td class="px-6 py-4 text-slate-300 font-medium">Available Seat</td>
+                                <td class="px-6 py-4 text-slate-300" id="modal-available-seat"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -83,10 +75,14 @@
     </div>
     <!-- Main Content -->
     <div class="container mx-auto py-10 px-6">
-        <a href="create-event"
-            class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mb-4">
-            Create Event
-        </a>
+
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-900">Bookings</h1>
+            <a href="create-event"
+                class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mb-4">
+                Create Event
+            </a>
+        </div>
         <div
             class="relative flex flex-col w-full h-full overflow-scroll text-slate-300 bg-slate-800 shadow-md rounded-lg bg-clip-border">
             <table class="w-full text-left table-auto min-w-max">
@@ -109,22 +105,14 @@
                         </th>
                         <th class="p-4 border-b border-slate-600 bg-slate-700">
                             <p class="text-sm font-normal leading-none text-slate-300">
-                                Date
+                                Date Time
                             </p>
                         </th>
                         <th class="p-4 border-b border-slate-600 bg-slate-700">
                             <p class="text-sm font-normal leading-none text-slate-300">
-                                Time
-                            </p>
-                        </th>
-                        <th class="p-4 border-b border-slate-600 bg-slate-700">
-                            <p class="text-sm font-normal leading-none text-slate-300">
-                                Table With Table
-                            </p>
-                        </th>
-                        <th class="p-4 border-b border-slate-600 bg-slate-700">
-                            <p class="text-sm font-normal leading-none text-slate-300">
-                                Table Without Table
+                                Price
+                            <p class="text-sm font-normal leading-none text-slate-300">With Table</p>
+                            <p class="text-sm font-normal leading-none text-slate-300">Without Table</p>
                             </p>
                         </th>
                         <th class="p-4 border-b border-slate-600 bg-slate-700">
@@ -139,6 +127,16 @@
                         </th>
                         <th class="p-4 border-b border-slate-600 bg-slate-700">
                             <p class="text-sm font-normal leading-none text-slate-300">
+                                Seat Booked
+                            </p>
+                        </th>
+                        <th class="p-4 border-b border-slate-600 bg-slate-700">
+                            <p class="text-sm font-normal leading-none text-slate-300">
+                                Available Seat
+                            </p>
+                        </th>
+                        <th class="p-4 border-b border-slate-600 bg-slate-700">
+                            <p class="text-sm font-normal leading-none text-slate-300">
                                 Actions
                             </p>
                         </th>
@@ -149,64 +147,72 @@
                     $sn = 1;
                     foreach ($events as $event):
                     ?>
-                        <tr class="hover:bg-slate-700">
-                            <td class="p-4 w-1 border-b border-slate-700 bg-slate-900">
-                                <p class="text-sm text-slate-100 font-semibold">
-                                    <?php echo htmlspecialchars($sn); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($event['name']); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-900">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($event['description']); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($event['date']); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($event['time']); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($event['price_with_table']); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($event['price_without_table']); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($event['requires_adult']); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($event['seat_limit']); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-900">
-                                <button onclick='showModal(<?php echo json_encode($event); ?>)'
-                                    class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-                                    View
-                                </button>
-                                <a href="edit-event?id=<?php echo $event['id']; ?>"
-                                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</a>
-                                <a href="delete_event?id=<?php echo $event['id']; ?>"
-                                    onclick="return confirm('Are you sure?');"
-                                    class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete</a>
-                            </td>
-                        </tr>
+                    <tr class="hover:bg-slate-700">
+                        <td class="p-4 w-1 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-100 font-semibold">
+                                <?php echo htmlspecialchars($sn); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($event['name']); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($event['description']); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($event['date']); ?>
+                                <?php echo htmlspecialchars($event['time']); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars('$' . $event['price_with_table']); ?> <br>
+                                <?php echo htmlspecialchars('$' . $event['price_without_table']); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                            <p class="text-sm text-slate-300">
+                                <?php
+                                    if ($event['requires_adult'] == 1) {
+                                        echo 'Yes';
+                                    } else {
+                                        echo "No";
+                                    }
+                                    ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($event['seat_limit']); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($event['total_quantity'] ?? 0); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($event['seat_limit'] - ($event['total_quantity'] ?? 0)); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-1000">
+                            <button onclick='showModal(<?php echo json_encode($event); ?>)'
+                                class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                                View
+                            </button>
+                            <a href="edit-event?id=<?php echo $event['id']; ?>"
+                                class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</a>
+                            <a href="delete_event?id=<?php echo $event['id']; ?>"
+                                onclick="return confirm('Are you sure?');"
+                                class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete</a>
+                        </td>
+                    </tr>
                     <?php
                         $sn++;
                     endforeach;
@@ -216,54 +222,53 @@
         </div>
     </div>
     <script>
-        function showModal(event) {
-            const modal = document.getElementById('eventModal');
-            const modalContent = modal.children[0];
+    function showModal(event) {
+        const modal = document.getElementById('eventModal');
+        const modalContent = modal.children[0];
 
-            // First make the modal visible but transparent
-            modal.classList.remove('hidden');
+        // First make the modal visible but transparent
+        modal.classList.remove('hidden');
 
-            // Force a reflow to enable the transition
-            void modal.offsetWidth;
+        // Force a reflow to enable the transition
+        void modal.offsetWidth;
 
-            // Make it visible with transition
-            modal.classList.remove('opacity-0');
-            modalContent.classList.remove('scale-95');
-            modalContent.classList.add('scale-100');
+        // Make it visible with transition
+        modal.classList.remove('opacity-0');
+        modalContent.classList.remove('scale-95');
+        modalContent.classList.add('scale-100');
 
-            // Set the content
-            document.getElementById('modal-title').textContent = 'Event Details';
-            document.getElementById('modal-name').textContent = event.name;
-            document.getElementById('modal-description').textContent = event.description;
-            document.getElementById('modal-date').textContent = event.date;
-            document.getElementById('modal-time').textContent = event.time;
-            document.getElementById('modal-price-with-table').textContent = event.price_with_table;
-            document.getElementById('modal-price-without-table').textContent = event.price_without_table;
-            document.getElementById('modal-requires-adult').textContent = event.requires_adult;
-            document.getElementById('modal-seat-limit').textContent = event.seat_limit;
+        // Set the content
+        document.getElementById('modal-title').textContent = 'Event Details';
+        document.getElementById('modal-name').textContent = event.name;
+        document.getElementById('modal-description').textContent = event.description;
+        document.getElementById('modal-date-time').textContent = event.date + ' ' + event.time;
+        document.getElementById('modal-price-with-table').textContent = '$' + event.price_with_table + ' ' + '$' + event
+            .price_without_table;
+        document.getElementById('modal-requires-adult').textContent = event.requires_adult;
+        document.getElementById('modal-available-seat').textContent = event.seat_limit - (event.total_quantity ?? 0);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('eventModal');
+        const modalContent = modal.children[0];
+
+        // Start the fade out animation
+        modal.classList.add('opacity-0');
+        modalContent.classList.remove('scale-100');
+        modalContent.classList.add('scale-95');
+
+        // Wait for animation to finish before hiding
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('eventModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
         }
-
-        function closeModal() {
-            const modal = document.getElementById('eventModal');
-            const modalContent = modal.children[0];
-
-            // Start the fade out animation
-            modal.classList.add('opacity-0');
-            modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-95');
-
-            // Wait for animation to finish before hiding
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('eventModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
+    });
     </script>
 </body>
 

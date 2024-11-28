@@ -82,10 +82,14 @@
     </div>
     <!-- Main Content -->
     <div class="container mx-auto py-10 px-6">
-        <a href="create-booking"
-            class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mb-4">
-            Create Booking
-        </a>
+
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-900">Bookings</h1>
+            <a href="create-booking"
+                class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mb-4">
+                Create Booking
+            </a>
+        </div>
         <div
             class="relative flex flex-col w-full h-full overflow-scroll text-slate-300 bg-slate-800 shadow-md rounded-lg bg-clip-border">
             <table class="w-full text-left table-auto min-w-max">
@@ -164,7 +168,7 @@
                                 <?php echo htmlspecialchars($booking['seat_type']); ?>
                             </p>
                         </td>
-                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
                             <p class="text-sm text-slate-300">
                                 <?php echo htmlspecialchars($booking['quantity']); ?>
                             </p>
@@ -175,7 +179,7 @@
                                     class="w-20 h-20 object-cover border-2 border-slate-500 rounded-md h-20 w-20">
                             </p>
                         </td>
-                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
                             <p class="text-sm text-slate-300">
                                 <?php echo htmlspecialchars($booking['total_price']); ?>
                             </p>

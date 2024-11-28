@@ -73,10 +73,14 @@
     </div>
     <!-- Main Content -->
     <div class="container mx-auto py-10 px-6">
-        <a href="create-user"
-            class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mb-4">
-            Create User
-        </a>
+
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-900">Bookings</h1>
+            <a href="create-user"
+                class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mb-4">
+                Create User
+            </a>
+        </div>
         <div
             class="relative flex flex-col w-full h-full overflow-scroll text-slate-300 bg-slate-800 shadow-md rounded-lg bg-clip-border">
             <table class="w-full text-left table-auto min-w-max">

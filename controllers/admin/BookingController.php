@@ -132,7 +132,6 @@ class BookingController
     public function edit(int $id): void
     {
         $booking = $this->booking->getBookingById($id);
-
         // Check if booking exists and is not empty/false/null
         if ($booking && !empty($booking)) {
             $users = $this->user->getAllUsers();

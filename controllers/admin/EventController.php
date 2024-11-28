@@ -13,6 +13,7 @@ class EventController
     {
         $events = $this->event->getAllEvents();
         // print_r($events);
+        // exit();
         include 'views/admin/event/events.php';
     }
     public function create(): void

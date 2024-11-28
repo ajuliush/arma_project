@@ -82,9 +82,12 @@
     </div>
     <!-- Main Content -->
     <div class="container mx-auto py-10 px-6">
-        <a href="/" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 mb-4">
-            Make Booking
-        </a>
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-900">My Tickets</h1>
+            <a href="/" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+                Make Booking
+            </a>
+        </div>
         <div
             class="relative flex flex-col w-full h-full overflow-scroll text-slate-300 bg-slate-800 shadow-md rounded-lg bg-clip-border">
             <table class="w-full text-left table-auto min-w-max">
@@ -142,60 +145,60 @@
                     $sn = 1;
                     foreach ($bookings as $booking):
                     ?>
-                        <tr class="hover:bg-slate-700">
-                            <td class="p-4 w-1 border-b border-slate-700 bg-slate-900">
-                                <p class="text-sm text-slate-100 font-semibold">
-                                    <?php echo htmlspecialchars($sn); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($booking->user_name); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-900">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($booking->event_name); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($booking->seat_type); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($booking->quantity); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <img src="<?php echo htmlspecialchars($booking->adult_photo); ?>" alt=""
-                                        class="w-20 h-20 object-cover border-2 border-slate-500 rounded-md h-20 w-20">
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($booking->total_price); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-800">
-                                <p class="text-sm text-slate-300">
-                                    <?php echo htmlspecialchars($booking->booking_date); ?>
-                                </p>
-                            </td>
-                            <td class="p-4 border-b border-slate-700 bg-slate-900">
-                                <button onclick='showModal(<?php echo json_encode($booking); ?>)'
-                                    class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-                                    View
-                                </button>
-                                <a href="edit-ticket?id=<?php echo ($booking->id); ?>"
-                                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</a>
-                                <a href="delete_ticket?id=<?php echo $booking->id; ?>"
-                                    onclick="return confirm('Are you sure?');"
-                                    class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete</a>
-                            </td>
-                        </tr>
+                    <tr class="hover:bg-slate-700">
+                        <td class="p-4 w-1 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-100 font-semibold">
+                                <?php echo htmlspecialchars($sn); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($booking->user_name); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($booking->event_name); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($booking->seat_type); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($booking->quantity); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                            <p class="text-sm text-slate-300">
+                                <img src="<?php echo htmlspecialchars($booking->adult_photo); ?>" alt=""
+                                    class="w-20 h-20 object-cover border-2 border-slate-500 rounded-md h-20 w-20">
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($booking->total_price); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-800">
+                            <p class="text-sm text-slate-300">
+                                <?php echo htmlspecialchars($booking->booking_date); ?>
+                            </p>
+                        </td>
+                        <td class="p-4 border-b border-slate-700 bg-slate-900">
+                            <button onclick='showModal(<?php echo json_encode($booking); ?>)'
+                                class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                                View
+                            </button>
+                            <a href="edit-ticket?id=<?php echo ($booking->id); ?>"
+                                class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Edit</a>
+                            <a href="delete_ticket?id=<?php echo $booking->id; ?>"
+                                onclick="return confirm('Are you sure?');"
+                                class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Delete</a>
+                        </td>
+                    </tr>
                     <?php
                         $sn++;
                     endforeach;
@@ -205,53 +208,53 @@
         </div>
     </div>
     <script>
-        function showModal(booking) {
-            const modal = document.getElementById('bookingModal');
-            const modalContent = modal.children[0];
+    function showModal(booking) {
+        const modal = document.getElementById('bookingModal');
+        const modalContent = modal.children[0];
 
-            // First make the modal visible but transparent
-            modal.classList.remove('hidden');
+        // First make the modal visible but transparent
+        modal.classList.remove('hidden');
 
-            // Force a reflow to enable the transition
-            void modal.offsetWidth;
+        // Force a reflow to enable the transition
+        void modal.offsetWidth;
 
-            // Make it visible with transition
-            modal.classList.remove('opacity-0');
-            modalContent.classList.remove('scale-95');
-            modalContent.classList.add('scale-100');
+        // Make it visible with transition
+        modal.classList.remove('opacity-0');
+        modalContent.classList.remove('scale-95');
+        modalContent.classList.add('scale-100');
 
-            // Set the content
-            document.getElementById('modal-title').textContent = 'Booking Details';
-            document.getElementById('modal-user-name').textContent = booking.user_name;
-            document.getElementById('modal-event-name').textContent = booking.event_name;
-            document.getElementById('modal-seat-type').textContent = booking.seat_type;
-            document.getElementById('modal-quantity').textContent = booking.quantity;
-            document.getElementById('modal-total-price').textContent = booking.total_price;
-            document.getElementById('modal-adult_photo').src = booking.adult_photo;
-            document.getElementById('modal-booking-date').textContent = booking.booking_date;
+        // Set the content
+        document.getElementById('modal-title').textContent = 'Booking Details';
+        document.getElementById('modal-user-name').textContent = booking.user_name;
+        document.getElementById('modal-event-name').textContent = booking.event_name;
+        document.getElementById('modal-seat-type').textContent = booking.seat_type;
+        document.getElementById('modal-quantity').textContent = booking.quantity;
+        document.getElementById('modal-total-price').textContent = booking.total_price;
+        document.getElementById('modal-adult_photo').src = booking.adult_photo;
+        document.getElementById('modal-booking-date').textContent = booking.booking_date;
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('bookingModal');
+        const modalContent = modal.children[0];
+
+        // Start the fade out animation
+        modal.classList.add('opacity-0');
+        modalContent.classList.remove('scale-100');
+        modalContent.classList.add('scale-95');
+
+        // Wait for animation to finish before hiding
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('bookingModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
         }
-
-        function closeModal() {
-            const modal = document.getElementById('bookingModal');
-            const modalContent = modal.children[0];
-
-            // Start the fade out animation
-            modal.classList.add('opacity-0');
-            modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-95');
-
-            // Wait for animation to finish before hiding
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('bookingModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
+    });
     </script>
 </body>
 

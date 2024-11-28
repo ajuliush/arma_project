@@ -66,17 +66,20 @@
                     ?>
                 </select>
                 <?php if (isset($errors['event_id'])): ?>
-                    <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
-                        <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['event_id']); ?></p>
-                    </div>
-                    <?php unset($errors['event_id']); ?>
+                <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
+                    <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['event_id']); ?></p>
+                </div>
+                <?php unset($errors['event_id']); ?>
                 <?php endif; ?>
             </div>
             <!-- Seat Type -->
             <div class="mb-4">
                 <label for="seat_type" class="block text-sm font-medium text-gray-700">Seat Type</label>
-                <p class="text-gray-500 mb-2 text-sm font-medium" id="seat_type_old_value" style="display: block;">
+                <p class="text-gray-500 mb-2 text-sm font-medium" id="show_seat_type_old_value" style="display: block;">
                     <?php echo $booking['seat_type'] . ' - $' . $booking['total_price'] / $booking['quantity'] ?></p>
+                <input type="hidden" id="price_per_ticket"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value="<?php echo  $booking['total_price'] / $booking['quantity'] ?>">
                 <input type="hidden" name="seat_type_old_value" id="seat_type_old_value"
                     value="<?php echo $booking['seat_type'] ?>"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
@@ -85,18 +88,30 @@
                     style="display: none;">
                 </select>
                 <?php if (isset($errors['seat_type'])): ?>
-                    <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
-                        <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['seat_type']); ?></p>
-                    </div>
-                    <?php unset($errors['seat_type']); ?>
+                <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
+                    <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['seat_type']); ?></p>
+                </div>
+                <?php unset($errors['seat_type']); ?>
                 <?php endif; ?>
             </div>
             <!-- Seat Limit -->
-            <!-- <div class="mb-4">
+            <div class="mb-4" style="display: none;" id="seat_limit_div">
                 <label for="seat_limit" class="block text-sm font-medium text-gray-700">Seat Limit</label>
                 <input type="text" id="seat_limit" name="seat_limit" readonly
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-            </div> -->
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100">
+            </div>
+            <!-- Book Seat -->
+            <div class="mb-4" style="display: none;" id="book_seat_div">
+                <label for="book_seat" class="block text-sm font-medium text-gray-700">Book Seat</label>
+                <input type="text" id="book_seat" name="book_seat" readonly
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100">
+            </div>
+            <!-- Available Seat -->
+            <div class="mb-4" style="display: none;" id="available_seat_div">
+                <label for="available_seat" class="block text-sm font-medium text-gray-700">Available Seat</label>
+                <input type="text" id="available_seat" name="available_seat" readonly
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100">
+            </div>
             <!-- Quantity -->
             <div class="mb-6">
                 <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
@@ -105,10 +120,10 @@
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     min="1" max="8" oninput="updateTotalPriceWithQuantity()">
                 <?php if (isset($errors['quantity'])): ?>
-                    <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
-                        <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['quantity']); ?></p>
-                    </div>
-                    <?php unset($errors['quantity']); ?>
+                <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
+                    <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['quantity']); ?></p>
+                </div>
+                <?php unset($errors['quantity']); ?>
                 <?php endif; ?>
             </div>
 
@@ -121,10 +136,10 @@
                 <input type="file" id="photo" name="photo" accept="image/*"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 <?php if (isset($errors['photo'])): ?>
-                    <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
-                        <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['photo']); ?></p>
-                    </div>
-                    <?php unset($errors['photo']); ?>
+                <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
+                    <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['photo']); ?></p>
+                </div>
+                <?php unset($errors['photo']); ?>
                 <?php endif; ?>
             </div>
 
@@ -143,10 +158,10 @@
                     value="<?php echo (new DateTime($booking['booking_date']))->format('Y-m-d'); ?>"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 <?php if (isset($errors['booking_date'])): ?>
-                    <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
-                        <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['booking_date']); ?></p>
-                    </div>
-                    <?php unset($errors['booking_date']); ?>
+                <div class="mb-4 p-4 rounded-md bg-red-50 border border-red-400">
+                    <p class="text-red-700 text-sm"><?php echo htmlspecialchars($errors['booking_date']); ?></p>
+                </div>
+                <?php unset($errors['booking_date']); ?>
                 <?php endif; ?>
             </div>
             <!-- Submit Button -->
@@ -159,77 +174,95 @@
         </form>
     </div>
     <script>
-        let prices = {}; // Global variable to store prices
+    let prices = {}; // Global variable to store prices
 
-        function retrieveEventData(id) {
-            if (id) {
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", `/get-seat-type?id=${id}`, true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        const response = JSON.parse(xhr.responseText);
-                        prices = { // Store prices in the global variable
-                            with_table: response.price_with_table,
-                            without_table: response.price_without_table
-                        };
+    function retrieveEventData(id) {
+        if (id) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", `/get-seat-type?id=${id}`, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    prices = { // Store prices in the global variable
+                        with_table: response.price_with_table,
+                        without_table: response.price_without_table
+                    };
 
-                        console.log(prices); // Log prices to verify they are set correctly
+                    console.log(response.total_quantity); // Log prices to verify they are set correctly
+                    seat_limit.value = response.seat_limit;
+                    book_seat.value = response.total_quantity;
+                    available_seat.value = response.seat_limit - response.total_quantity;
+                    // Update the UI with the seat type and prices
+                    const seatTypeSelect = document.getElementById('seat_type');
+                    const seatTypeOldValue = document.getElementById('show_seat_type_old_value');
+                    seatTypeSelect.innerHTML = ""; // Clear existing options
+                    seatTypeSelect.add(new Option("Select Seat Type", "")); // Add default option
+                    seatTypeSelect.add(new Option(`With Table - $${prices.with_table}`, "with_table"));
+                    seatTypeSelect.add(new Option(`Without Table - $${prices.without_table}`, "without_table"));
 
-                        // Update the UI with the seat type and prices
-                        const seatTypeSelect = document.getElementById('seat_type');
-                        const seatTypeOldValue = document.getElementById('seat_type_old_value');
-                        seatTypeSelect.innerHTML = ""; // Clear existing options
-                        seatTypeSelect.add(new Option("Select Seat Type", "")); // Add default option
-                        seatTypeSelect.add(new Option(`With Table - $${prices.with_table}`, "with_table"));
-                        seatTypeSelect.add(new Option(`Without Table - $${prices.without_table}`, "without_table"));
-
-                        // Show seatTypeSelect and hide seat_type_old_value
-                        seatTypeSelect.style.display = "block";
-                        seatTypeOldValue.style.display = "none";
-                    } else {
-                        console.error("Error fetching seat type");
-                    }
-                };
-                xhr.send();
-            } else {
-                document.getElementById('seat_type').value = ""; // Clear the seat type
-            }
+                    // Show seatTypeSelect and hide seat_type_old_value
+                    seatTypeSelect.style.display = "block";
+                    seatTypeOldValue.style.display = "none";
+                    document.getElementById('seat_limit_div').style.display = "block";
+                    document.getElementById('book_seat_div').style.display = "block";
+                    document.getElementById('available_seat_div').style.display = "block";
+                } else {
+                    console.error("Error fetching seat type");
+                }
+            };
+            xhr.send();
+        } else {
+            document.getElementById('seat_type').value = ""; // Clear the seat type
         }
-        // Retrieve seat type value
-        function updateTotalPrice(seatType) {
-            console.log("Selected seat type:", seatType, "Price:", prices[
-                seatType]); // Log the selected seat type and its price
-            const totalPriceInput = document.getElementById('total_price');
+    }
+    // Retrieve seat type value
+    function updateTotalPrice(seatType) {
+        console.log("Selected seat type:", seatType, "Price:", prices[
+            seatType]); // Log the selected seat type and its price
+        const totalPriceInput = document.getElementById('total_price');
 
-            // Update the total price input based on the selected seat type
-            if (prices[seatType]) {
-                totalPriceInput.value = `$${prices[seatType]}`; // Set the total price with a dollar sign
-            } else {
-                totalPriceInput.value = ""; // Clear if no valid seat type is selected
-            }
+        // Update the total price input based on the selected seat type
+        if (prices[seatType]) {
+            totalPriceInput.value = `$${prices[seatType]}`; // Set the total price with a dollar sign
+        } else {
+            totalPriceInput.value = ""; // Clear if no valid seat type is selected
+        }
+    }
+
+    function updateTotalPriceWithQuantity() {
+        const pricePerTicket = parseInt(document.getElementById('price_per_ticket').value);
+        // alert(pricePerTicket);
+        const quantityInput = document.getElementById('quantity'); // Get the quantity input element
+        let quantity = quantityInput.value; // Get the quantity value
+        const seatType = document.getElementById('seat_type').value; // Get the selected seat type
+        const totalPriceInput = document.getElementById('total_price');
+        const availableSeats = parseInt(document.getElementById('available_seat').value); // Get available seats
+
+        // Check if quantity exceeds available seats or 8
+        if (quantity > availableSeats) {
+            alert(
+                `Quantity cannot exceed available seats (${availableSeats}). Setting quantity to ${availableSeats}.`
+            ); // Show alert message
+            quantity = availableSeats; // Set quantity to available seats
+        }
+        if (quantity > 8) {
+            alert("Quantity cannot exceed 8. Setting quantity to 8."); // Show alert message
+            quantity = 8; // Set quantity to 8
         }
 
-        function updateTotalPriceWithQuantity() {
-            const quantityInput = document.getElementById('quantity'); // Get the quantity input element
-            let quantity = quantityInput.value; // Get the quantity value
-            const seatType = document.getElementById('seat_type').value; // Get the selected seat type
-            const totalPriceInput = document.getElementById('total_price');
+        quantityInput.value = quantity; // Update the input field
 
-            // Check if quantity exceeds 8
-            if (quantity > 8) {
-                alert("Quantity cannot exceed 8. Setting quantity to 8."); // Show alert message
-                quantity = 8; // Set quantity to 8
-                quantityInput.value = quantity; // Update the input field
-            }
-
-            // Calculate the total price based on the selected seat type and quantity
-            if (prices[seatType] && quantity) {
-                const totalPrice = prices[seatType] * quantity; // Calculate total price
-                totalPriceInput.value = `$${totalPrice.toFixed(2)}`; // Set the total price with a dollar sign
-            } else {
-                totalPriceInput.value = ""; // Clear if no valid seat type or quantity is selected
-            }
+        // Calculate the total price based on the selected seat type and quantity
+        if (prices[seatType] && quantity) {
+            const totalPrice = prices[seatType] * quantity; // Calculate total price
+            totalPriceInput.value = `$${totalPrice.toFixed(2)}`; // Set the total price with a dollar sign
+        } else if (quantity) {
+            const totalOldPrice = pricePerTicket * quantity;
+            totalPriceInput.value = `$${totalOldPrice.toFixed(2)}`; // Set the total price with a dollar sign
+        } else {
+            totalPriceInput.value = ""; // Clear if no valid seat type or quantity is selected
         }
+    }
     </script>
 </body>
 

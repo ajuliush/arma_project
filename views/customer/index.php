@@ -50,6 +50,11 @@
                                 <span
                                     class="text-lg font-semibold text-blue-600">$<?php echo $event['price_without_table']; ?></span>
                             </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Available Seats:</span>
+                                <span
+                                    class="text-lg font-semibold text-red-600"><?php echo $event['seat_limit'] - $event['total_quantity']; ?></span>
+                            </div>
                         </div>
 
                         <button onclick="openModal(<?php echo htmlspecialchars(json_encode($event)); ?>)"
@@ -118,6 +123,14 @@
                                     <p class="mt-1 text-sm text-gray-500">Maximum 8 tickets per booking</p>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- New Available Tickets Section -->
+                        <div class="bg-green-50 p-6 rounded-xl space-y-6">
+                            <h4 class="text-lg font-semibold text-gray-800">Available Tickets</h4>
+                            <p class="text-sm text-gray-600">We have <span id="availableTicketsCount"
+                                    class="font-bold">0</span> tickets available for this event.</p>
+                            <input type="text" id="availableTickets">
                         </div>
 
                         <!-- Personal Details Section -->
@@ -193,6 +206,8 @@
         document.getElementById('modal-title').textContent = 'Book for ' + event.name;
         document.getElementById('user_id').value = currentUserId;
         document.getElementById('event_id').value = event.id;
+        document.getElementById('availableTicketsCount').textContent = event.seat_limit - event.total_quantity;
+        document.getElementById('availableTickets').value = event.seat_limit - event.total_quantity;
         document.getElementById('bookingModal').classList.remove('hidden');
         window.dispatchEvent(new CustomEvent('open-modal'));
         updateTotalPrice();
@@ -208,8 +223,10 @@
         if (!currentEvent) return;
 
         let quantity = parseInt(document.getElementById('ticketQuantity').value);
-        // Ensure quantity doesn't exceed 8
-        quantity = Math.min(quantity, 8);
+        const availableTickets = parseInt(document.getElementById('availableTicketsCount').textContent);
+
+        // Ensure quantity doesn't exceed available tickets and 8
+        quantity = Math.min(quantity, availableTickets, 8);
         document.getElementById('ticketQuantity').value = quantity;
 
         const ticketType = document.getElementById('ticketType').value;
@@ -242,8 +259,12 @@
     document.getElementById('ticketQuantity').addEventListener('input', updateTotalPrice);
 
     function validateTicketQuantity(input) {
+        const availableTickets = parseInt(document.getElementById('availableTicketsCount').textContent);
+        if (input.value > availableTickets) {
+            input.value = availableTickets; // Set to available tickets if exceeds
+        }
         if (input.value > 8) {
-            input.value = 8;
+            input.value = 8; // Set to 8 if exceeds
         }
         updateTotalPrice();
     }
