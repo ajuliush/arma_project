@@ -159,10 +159,14 @@
             </div>
             <!-- Submit Button -->
             <div>
-                <button type="submit"
+                <button type="submit" id="if_seat_availability"
                     class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none">
                     Create
                 </button>
+                <p id="if__not_seat_availability" style="display: none;"
+                    class="w-full bg-red-500 text-white font-bold py-2 px-4 rounded-md hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none text-center">
+                    No Seats are available, please select another event!
+                </p>
             </div>
         </form>
     </div>
@@ -191,6 +195,15 @@
                     seatTypeSelect.add(new Option("Select Seat Type", "")); // Add default option
                     seatTypeSelect.add(new Option(`With Table - $${prices.with_table}`, "with_table"));
                     seatTypeSelect.add(new Option(`Without Table - $${prices.without_table}`, "without_table"));
+
+                    if (response.seat_limit - response.total_quantity === 0) {
+                        alert('No seats are available, Select another event!');
+                        document.getElementById('if_seat_availability').style.display = "none";
+                        document.getElementById('if__not_seat_availability').style.display = "block";
+                    } else {
+                        document.getElementById('if_seat_availability').style.display = "block";
+                        document.getElementById('if__not_seat_availability').style.display = "none";
+                    }
                 } else {
                     console.error("Error fetching seat type");
                 }
@@ -225,7 +238,7 @@
         if (quantity > availableSeats) {
             alert(
                 `Quantity cannot exceed available seats (${availableSeats}). Setting quantity to ${availableSeats}.`
-                ); // Show alert message
+            ); // Show alert message
             quantity = availableSeats; // Set quantity to available seats
         }
         if (quantity > 8) {

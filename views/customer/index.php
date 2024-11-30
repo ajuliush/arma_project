@@ -52,15 +52,36 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600">Available Seats:</span>
-                                <span
-                                    class="text-lg font-semibold text-red-600"><?php echo $event['seat_limit'] - $event['total_quantity']; ?></span>
+                                <?php
+                                    $availableSeats = $event['seat_limit'] - $event['total_quantity'];
+                                    if ($availableSeats == 0) {
+                                        echo '<span
+                                            class="text-lg font-semibold text-red-600">' . $availableSeats . '</span>';
+                                    } else {
+                                        echo '<span
+                                            class="text-lg font-semibold text-red-600">' . $availableSeats . '</span>';
+                                    }
+                                    ?>
                             </div>
                         </div>
+                        <?php
+                            if ($event['seat_limit'] - $event['total_quantity'] == 0) {
+                                echo '<button
+                                    class="mt-6 w-full bg-red-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-600
+                                    transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2
+                                    focus:ring-red-500 focus:ring-opacity-50">
+                                    No Tickets are available!!
+                                    </button>';
+                            } else {
+                                echo '<button onclick="openModal(' . htmlspecialchars(json_encode($event)) . ')"
+                                    class="mt-6 w-full bg-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-600
+                                    transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2
+                                    focus:ring-blue-500 focus:ring-opacity-50">
+                                    Book Now
+                                    </button>';
+                            }
+                            ?>
 
-                        <button onclick="openModal(<?php echo htmlspecialchars(json_encode($event)); ?>)"
-                            class="mt-6 w-full bg-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-600 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                            Book Now
-                        </button>
                     </div>
                 </div>
                 <?php endforeach; ?>

@@ -166,10 +166,14 @@
             </div>
             <!-- Submit Button -->
             <div>
-                <button type="submit"
+                <button type="submit" id="if_seat_availability"
                     class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none">
                     Create
                 </button>
+                <p id="if__not_seat_availability" style="display: none;"
+                    class="w-full bg-red-500 text-white font-bold py-2 px-4 rounded-md hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none text-center">
+                    No Seats are available, please select another event!
+                </p>
             </div>
         </form>
     </div>
@@ -188,10 +192,12 @@
                         without_table: response.price_without_table
                     };
 
-                    console.log(response.total_quantity); // Log prices to verify they are set correctly
+                    // console.log(response.total_quantity); // Log prices to verify they are set correctly
                     seat_limit.value = response.seat_limit;
                     book_seat.value = response.total_quantity;
                     available_seat.value = response.seat_limit - response.total_quantity;
+
+
                     // Update the UI with the seat type and prices
                     const seatTypeSelect = document.getElementById('seat_type');
                     const seatTypeOldValue = document.getElementById('show_seat_type_old_value');
@@ -206,6 +212,15 @@
                     document.getElementById('seat_limit_div').style.display = "block";
                     document.getElementById('book_seat_div').style.display = "block";
                     document.getElementById('available_seat_div').style.display = "block";
+                    if (response.seat_limit - response.total_quantity === 0) {
+                        alert('No seats are available, Select another event!');
+                        document.getElementById('if_seat_availability').style.display = "none";
+                        document.getElementById('if__not_seat_availability').style.display = "block";
+                    } else {
+                        document.getElementById('if_seat_availability').style.display = "block";
+                        document.getElementById('if__not_seat_availability').style.display = "none";
+                    }
+
                 } else {
                     console.error("Error fetching seat type");
                 }
