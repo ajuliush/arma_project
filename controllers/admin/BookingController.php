@@ -132,6 +132,10 @@ class BookingController
     public function edit(int $id): void
     {
         $booking = $this->booking->getBookingById($id);
+        $totalQuantityOfTickets = $this->booking->getTotalQuantityByEventId($booking['event_id']);
+        $totalSeatOfTickets = $this->booking->getTotalsSeatByEventId($booking['event_id']);
+        // print_r($totalSeatOfTickets);
+        // exit();
         // Check if booking exists and is not empty/false/null
         if ($booking && !empty($booking)) {
             $users = $this->user->getAllUsers();
@@ -145,14 +149,19 @@ class BookingController
     }
     public function update(int $id): void
     {
+        // print_r($_POST);
+        // exit();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user_id         = $_POST['user_id'] ?? null;
             $event_id        = $_POST['event_id'] ?? null;
             $seat_type       = $_POST['seat_type'] ?? $_POST['seat_type_old_value'];
-            $quantity        = $_POST['quantity'] ?? null;
+            $quantity        = !empty($_POST['new_quantity']) ? $_POST['new_quantity'] : ($_POST['old_quantity'] ?? null);
             $total_price     = isset($_POST['total_price']) ? floatval(str_replace('$', '', $_POST['total_price'])) : null;
             $booking_date    = $_POST['booking_date'] ?? null;
             $photo           = $_FILES['photo'] ?? null;
+
+            // print_r($quantity);
+            // exit();
 
             //validations
             $errors = [];
@@ -165,8 +174,9 @@ class BookingController
             if (empty($seat_type)) {
                 $errors['seat_type'] = 'Seat type is required';
             }
-            if (empty($quantity)) {
-                $errors['quantity'] = 'Quantity is required';
+            // Ensure at least one of the fields is filled
+            if (empty($_POST['old_quantity']) && empty($_POST['new_quantity'])) {
+                $errors['quantity'] = 'Either Old Quantity or New Quantity must be provided.';
             }
             if (empty($total_price)) {
                 $errors['total_price'] = 'Total price is required';

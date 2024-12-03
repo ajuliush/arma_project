@@ -134,6 +134,49 @@ class Booking
         $stmt->close();
         return $booking ?: null;
     }
+    public function getTotalQuantityByEventId(int $eventId): int
+    {
+        global $conn;
+        $stmt = $conn->prepare("
+        SELECT SUM(quantity) AS total_quantity
+        FROM tickets
+        WHERE event_id = ?
+    ");
+        $stmt->bind_param("i", $eventId);
+        // Execute the statement
+        $stmt->execute();
+        // Get the result
+        $result = $stmt->get_result();
+        // Fetch the total quantity
+        $data = $result->fetch_assoc();
+        // Close the statement
+        $stmt->close();
+        // Return the total quantity (0 if null)
+        return $data['total_quantity'] ?? 0;
+    }
+
+    public function getTotalsSeatByEventId(int $eventId): int
+    {
+        global $conn;
+        $stmt = $conn->prepare("
+        SELECT  id,
+        seat_limit
+        FROM events
+        WHERE id = ?
+    ");
+        $stmt->bind_param("i", $eventId);
+        // Execute the statement
+        $stmt->execute();
+        // Get the result
+        $result = $stmt->get_result();
+        // Fetch the total quantity
+        $data = $result->fetch_assoc();
+        // Close the statement
+        $stmt->close();
+        // Return the total quantity (0 if null)
+        return $data['seat_limit'] ?? 0;
+    }
+
     public function update(): bool
     {
         global $conn;
