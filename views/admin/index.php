@@ -13,7 +13,9 @@
     <?php
     include_once "views/components/admin-navbar.php";
     ?>
-
+    <?php
+    include_once "views/components/message.php";
+    ?>
     <!-- Main Content -->
     <div class="container mx-auto py-10 px-6">
         <!-- Overview Section -->

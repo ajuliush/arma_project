@@ -139,6 +139,7 @@ class AuthController
             $_SESSION['email']        = $email;
             $_SESSION['role']         = $user['role'];
 
+            $_SESSION['success_message'] = "Login successful!.";
             header('Location: /');
             exit();
         } else {

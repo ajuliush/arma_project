@@ -385,9 +385,13 @@ switch ($route) {
         break;
         // Default route for logout user start here
     case 'logout':
+        session_start(); // Start session if not already started
+        $_SESSION['success_message'] = "Logout successfully!";
         session_destroy(); // Destroy the session
-        redirectTo('/login'); // Redirect to login page
+        header('Location: /login'); // Redirect to login page
+        exit; // Stop further script execution
         break;
+
         // Default route for logout user end here
         // Default route for 404 page start here
     default:
