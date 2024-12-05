@@ -132,6 +132,10 @@ class CustomerController
     public function editTicket($id): void
     {
         $booking = $this->booking->getBookingById($id);
+        $totalQuantityOfTickets = $this->booking->getTotalQuantityByEventId($booking['event_id']);
+        $totalSeatOfTickets = $this->booking->getTotalsSeatByEventId($booking['event_id']);
+        // print_r($totalQuantityOfTickets);
+        // exit();
         // print_r($booking);
         $users = $this->user->getAllUsers();
         $events = $this->event->getAllEvents();
@@ -143,7 +147,7 @@ class CustomerController
             $user_id         = $_POST['user_id'] ?? null;
             $event_id        = $_POST['event_id'] ?? null;
             $seat_type       = $_POST['seat_type'] ?? $_POST['seat_type_old_value'];
-            $quantity        = $_POST['quantity'] ?? null;
+            $quantity        = !empty($_POST['new_quantity']) ? $_POST['new_quantity'] : ($_POST['old_quantity'] ?? null);
             $total_price     = isset($_POST['total_price']) ? floatval(str_replace('$', '', $_POST['total_price'])) : null;
             $booking_date    = $_POST['booking_date'] ?? null;
             $photo           = $_FILES['photo'] ?? null;
@@ -159,8 +163,9 @@ class CustomerController
             if (empty($seat_type)) {
                 $errors['seat_type'] = 'Seat type is required';
             }
-            if (empty($quantity)) {
-                $errors['quantity'] = 'Quantity is required';
+            // Ensure at least one of the fields is filled
+            if (empty($_POST['old_quantity']) && empty($_POST['new_quantity'])) {
+                $errors['quantity'] = 'Either Old Quantity or New Quantity must be provided.';
             }
             if (empty($total_price)) {
                 $errors['total_price'] = 'Total price is required';

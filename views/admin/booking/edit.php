@@ -153,8 +153,6 @@
                     unset($errors['quantity']);
                     ?>
                 <?php endif; ?>
-
-
             </div>
 
 
